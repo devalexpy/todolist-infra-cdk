@@ -20,10 +20,9 @@ steps:
   displayName: 'Install Node.js'
 - script: |
     npm install -g aws-cdk
-- task: Npm@1
-  inputs:
-    command: 'install'
-
+    npm install
+    npm run build
+    cdk synth
 - task: AWSShellScript@1
   inputs:
     awsCredentials: 'AWS'
