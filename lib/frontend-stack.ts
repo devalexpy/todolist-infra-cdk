@@ -32,8 +32,8 @@ export class FrontendStack extends NestedStack {
 
   public getOutputs(): objectType {
     return {
-      websiteBucketName: this.websiteBucketName,
-      distributionId: this.distributionId,
+      website_bucket_name: this.websiteBucketName,
+      distribution_id: this.distributionId,
     };
   }
 }
