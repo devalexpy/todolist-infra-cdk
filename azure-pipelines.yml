@@ -27,4 +27,5 @@ steps:
     regionName: '$(AWS_REGION)'
     scriptType: 'inline'
     inlineScript: |
+      cdk bootstrap
       cdk deploy
