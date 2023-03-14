@@ -1,0 +1,31 @@
+{
+  "name": "todolist-infra-cdk",
+  "version": "0.1.0",
+  "bin": {
+    "todolist-infra-cdk": "bin/todolist-infra-cdk.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.4.0",
+    "@types/node": "18.14.6",
+    "aws-cdk": "2.68.0",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.0.5",
+    "ts-node": "^10.9.1",
+    "typescript": "~4.9.5"
+  },
+  "dependencies": {
+    "@aws-solutions-constructs/aws-cloudfront-s3": "^2.33.0",
+    "@aws-solutions-constructs/aws-cognito-apigateway-lambda": "^2.33.0",
+    "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.33.0",
+    "@aws-solutions-constructs/aws-wafwebacl-apigateway": "^2.33.0",
+    "@aws-solutions-constructs/aws-wafwebacl-cloudfront": "^2.33.0",
+    "aws-cdk-lib": "2.68.0",
+    "constructs": "^10.0.0"
+  }
+}
