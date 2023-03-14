@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    exclude:
+      - '*.yml'
+      - '*.json'
+      - .gitignore
+      - .npmignore
+      - README.md
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.x'
+  displayName: 'Install Node.js'
+
+- task: Npm@1
+  inputs:
+    command: 'install'
+
+- task: AWSShellScript@1
+  inputs:
+    awsCredentials: 'AWS'
+    regionName: '$(AWS_REGION)'
+    scriptType: 'inline'
+    inlineScript: |
+      cdk bootstrap
+      cdk deploy
