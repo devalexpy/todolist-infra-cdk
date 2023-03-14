@@ -21,12 +21,11 @@ steps:
 - script: |
     npm install -g aws-cdk
     npm install
-    npm run build
-    cdk synth
 - task: AWSShellScript@1
   inputs:
     awsCredentials: 'AWS'
     regionName: '$(AWS_REGION)'
     scriptType: 'inline'
     inlineScript: |
+      cdk bootstrap
       cdk deploy
