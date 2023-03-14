@@ -21,9 +21,9 @@ export class FrontendStack extends NestedStack {
       insertHttpSecurityHeaders: false,
     });
 
-    /* new WafwebaclToCloudFront(this, "WafwebaclToCloudFrontPattern", {
+    new WafwebaclToCloudFront(this, "WafwebaclToCloudFrontPattern", {
       existingCloudFrontWebDistribution: cloudfrontS3.cloudFrontWebDistribution,
-    }); */
+    });
 
     this.cloudfrontUrl = cloudfrontS3.cloudFrontWebDistribution.domainName;
     this.websiteBucketName = cloudfrontS3.s3Bucket?.bucketName as string;
