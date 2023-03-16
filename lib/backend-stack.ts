@@ -122,7 +122,7 @@ export class BackendStack extends NestedStack {
     new WafwebaclToApiGateway(this, "WafwebaclToApiGatewayPattern", {
       existingApiGatewayInterface: cognitoApigwLambda.apiGateway,
       webaclProps: {
-        ...DefaultWafwebaclProps("CLOUDFRONT"),
+        ...DefaultWafwebaclProps("REGIONAL"),
         visibilityConfig: {
           cloudWatchMetricsEnabled: true,
           metricName: "cloudfront-waf-metric",
