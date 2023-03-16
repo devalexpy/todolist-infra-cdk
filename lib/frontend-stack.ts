@@ -37,11 +37,12 @@ export class FrontendStack extends NestedStack {
       "cloudfrontWebACLLogGroup",
       {
         logGroupName: "cloudfrontWebACLLogGroup",
+        removalPolicy: RemovalPolicy.DESTROY,
       }
     );
 
     new CfnLoggingConfiguration(this, "cloudfrontWebACLLoggingConfiguration", {
-      logDestinationConfigs: [`${cloudfrontWebACLLogGroup.logGroupArn}:*`],
+      logDestinationConfigs: [cloudfrontWebACLLogGroup.logGroupArn],
       resourceArn: cloudfrontWebACL.webacl.attrArn,
     });
 

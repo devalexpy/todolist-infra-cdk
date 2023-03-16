@@ -133,11 +133,12 @@ export class BackendStack extends NestedStack {
       "apigatewayWebACLLogGroup",
       {
         logGroupName: "apigatewayWebACLLogGroup",
+        removalPolicy: RemovalPolicy.DESTROY,
       }
     );
 
     new CfnLoggingConfiguration(this, "apigatewayWebACLLoggingConfiguration", {
-      logDestinationConfigs: [`${apigatewayWebACLLogGroup.logGroupArn}:*`],
+      logDestinationConfigs: [apigatewayWebACLLogGroup.logGroupArn],
       resourceArn: apigatewayWebACL.webacl.attrArn,
     });
 
