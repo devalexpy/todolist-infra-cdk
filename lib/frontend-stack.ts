@@ -1,9 +1,4 @@
-import {
-  ArnFormat,
-  NestedStack,
-  NestedStackProps,
-  RemovalPolicy,
-} from "aws-cdk-lib";
+import { NestedStack, NestedStackProps, RemovalPolicy } from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { CloudFrontToS3 } from "@aws-solutions-constructs/aws-cloudfront-s3";
 import { WafwebaclToCloudFront } from "@aws-solutions-constructs/aws-wafwebacl-cloudfront";
@@ -46,7 +41,7 @@ export class FrontendStack extends NestedStack {
     );
 
     new CfnLoggingConfiguration(this, "cloudfrontWebACLLoggingConfiguration", {
-      logDestinationConfigs: [cloudfrontWebACLLogGroup.logGroupArn],
+      logDestinationConfigs: [`${cloudfrontWebACLLogGroup.logGroupArn}:*`],
       resourceArn: cloudfrontWebACL.webacl.attrArn,
     });
 

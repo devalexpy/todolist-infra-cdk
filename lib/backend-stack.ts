@@ -1,9 +1,4 @@
-import {
-  NestedStack,
-  NestedStackProps,
-  RemovalPolicy,
-  ArnFormat,
-} from "aws-cdk-lib";
+import { NestedStack, NestedStackProps, RemovalPolicy } from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { LambdaToDynamoDB } from "@aws-solutions-constructs/aws-lambda-dynamodb";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
@@ -142,7 +137,7 @@ export class BackendStack extends NestedStack {
     );
 
     new CfnLoggingConfiguration(this, "apigatewayWebACLLoggingConfiguration", {
-      logDestinationConfigs: [apigatewayWebACLLogGroup.logGroupArn],
+      logDestinationConfigs: [`${apigatewayWebACLLogGroup.logGroupArn}:*`],
       resourceArn: apigatewayWebACL.webacl.attrArn,
     });
 
