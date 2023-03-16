@@ -6,6 +6,7 @@ import * as lambda from "aws-cdk-lib/aws-lambda";
 import { CognitoToApiGatewayToLambda } from "@aws-solutions-constructs/aws-cognito-apigateway-lambda";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import { WafwebaclToApiGateway } from "@aws-solutions-constructs/aws-wafwebacl-apigateway";
+import { DefaultWafwebaclProps } from "@aws-solutions-constructs/core/lib/waf-defaults";
 
 interface BackendStackProps extends NestedStackProps {
   readonly cloudfrontUrl: string;
@@ -120,6 +121,14 @@ export class BackendStack extends NestedStack {
 
     new WafwebaclToApiGateway(this, "WafwebaclToApiGatewayPattern", {
       existingApiGatewayInterface: cognitoApigwLambda.apiGateway,
+      webaclProps: {
+        ...DefaultWafwebaclProps("CLOUDFRONT"),
+        visibilityConfig: {
+          cloudWatchMetricsEnabled: true,
+          metricName: "cloudfront-waf-metric",
+          sampledRequestsEnabled: true,
+        },
+      },
     });
 
     this.cognitoUrl = `https://${cognitoDomain.domainName}.auth.${process.env.CDK_DEFAULT_REGION}.amazoncognito.com/login?response_type=token&client_id=${cognitoApigwLambda.userPoolClient.userPoolClientId}&redirect_uri=https://${props.cloudfrontUrl}`;

@@ -2,6 +2,7 @@ import { NestedStack, NestedStackProps, RemovalPolicy } from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { CloudFrontToS3 } from "@aws-solutions-constructs/aws-cloudfront-s3";
 import { WafwebaclToCloudFront } from "@aws-solutions-constructs/aws-wafwebacl-cloudfront";
+import { DefaultWafwebaclProps } from "@aws-solutions-constructs/core/lib/waf-defaults";
 
 interface objectType {
   [key: string]: string;
@@ -23,6 +24,14 @@ export class FrontendStack extends NestedStack {
 
     new WafwebaclToCloudFront(this, "WafwebaclToCloudFrontPattern", {
       existingCloudFrontWebDistribution: cloudfrontS3.cloudFrontWebDistribution,
+      webaclProps: {
+        ...DefaultWafwebaclProps("CLOUDFRONT"),
+        visibilityConfig: {
+          cloudWatchMetricsEnabled: true,
+          metricName: "cloudfront-waf-metric",
+          sampledRequestsEnabled: true,
+        },
+      },
     });
 
     this.cloudfrontUrl = cloudfrontS3.cloudFrontWebDistribution.domainName;
