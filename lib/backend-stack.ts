@@ -1,4 +1,9 @@
-import { NestedStack, NestedStackProps, RemovalPolicy } from "aws-cdk-lib";
+import {
+  NestedStack,
+  NestedStackProps,
+  RemovalPolicy,
+  ArnFormat,
+} from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { LambdaToDynamoDB } from "@aws-solutions-constructs/aws-lambda-dynamodb";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
@@ -6,7 +11,8 @@ import * as lambda from "aws-cdk-lib/aws-lambda";
 import { CognitoToApiGatewayToLambda } from "@aws-solutions-constructs/aws-cognito-apigateway-lambda";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import { WafwebaclToApiGateway } from "@aws-solutions-constructs/aws-wafwebacl-apigateway";
-import { DefaultWafwebaclProps } from "@aws-solutions-constructs/core/lib/waf-defaults";
+import { CfnLoggingConfiguration } from "aws-cdk-lib/aws-wafv2";
+import { LogGroup } from "aws-cdk-lib/aws-logs";
 
 interface BackendStackProps extends NestedStackProps {
   readonly cloudfrontUrl: string;
@@ -127,11 +133,25 @@ export class BackendStack extends NestedStack {
       }
     );
 
-    apigatewayWebACL.webacl.visibilityConfig = {
-      cloudWatchMetricsEnabled: true,
-      metricName: "apigatewayWebACL",
-      sampledRequestsEnabled: true,
-    };
+    const apigatewayWebACLLogGroup = new LogGroup(
+      this,
+      "apigatewayWebACLLogGroup",
+      {
+        logGroupName: "apigatewayWebACLLogGroup",
+      }
+    );
+
+    new CfnLoggingConfiguration(this, "apigatewayWebACLLoggingConfiguration", {
+      logDestinationConfigs: [
+        NestedStack.of(this).formatArn({
+          arnFormat: ArnFormat.COLON_RESOURCE_NAME,
+          service: "logs",
+          resource: "log-group",
+          resourceName: apigatewayWebACLLogGroup.logGroupName,
+        }),
+      ],
+      resourceArn: apigatewayWebACL.webacl.attrArn,
+    });
 
     this.cognitoUrl = `https://${cognitoDomain.domainName}.auth.${process.env.CDK_DEFAULT_REGION}.amazoncognito.com/login?response_type=token&client_id=${cognitoApigwLambda.userPoolClient.userPoolClientId}&redirect_uri=https://${props.cloudfrontUrl}`;
 

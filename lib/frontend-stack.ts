@@ -1,7 +1,14 @@
-import { NestedStack, NestedStackProps, RemovalPolicy } from "aws-cdk-lib";
+import {
+  ArnFormat,
+  NestedStack,
+  NestedStackProps,
+  RemovalPolicy,
+} from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { CloudFrontToS3 } from "@aws-solutions-constructs/aws-cloudfront-s3";
 import { WafwebaclToCloudFront } from "@aws-solutions-constructs/aws-wafwebacl-cloudfront";
+import { LogGroup } from "aws-cdk-lib/aws-logs";
+import { CfnLoggingConfiguration } from "aws-cdk-lib/aws-wafv2";
 
 interface objectType {
   [key: string]: string;
@@ -30,11 +37,25 @@ export class FrontendStack extends NestedStack {
       }
     );
 
-    cloudfrontWebACL.webacl.visibilityConfig = {
-      cloudWatchMetricsEnabled: true,
-      metricName: "cloudfrontWebACL",
-      sampledRequestsEnabled: true,
-    };
+    const cloudfrontWebACLLogGroup = new LogGroup(
+      this,
+      "cloudfrontWebACLLogGroup",
+      {
+        logGroupName: "cloudfrontWebACLLogGroup",
+      }
+    );
+
+    new CfnLoggingConfiguration(this, "cloudfrontWebACLLoggingConfiguration", {
+      logDestinationConfigs: [
+        NestedStack.of(this).formatArn({
+          arnFormat: ArnFormat.COLON_RESOURCE_NAME,
+          service: "logs",
+          resource: "log-group",
+          resourceName: cloudfrontWebACLLogGroup.logGroupName,
+        }),
+      ],
+      resourceArn: cloudfrontWebACL.webacl.attrArn,
+    });
 
     this.cloudfrontUrl = cloudfrontS3.cloudFrontWebDistribution.domainName;
     this.websiteBucketName = cloudfrontS3.s3Bucket?.bucketName as string;
