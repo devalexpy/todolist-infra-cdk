@@ -3,6 +3,7 @@ import { Construct } from "constructs";
 import { BackendStack } from "./backend-stack";
 import { FrontendStack } from "./frontend-stack";
 import * as ssm from "aws-cdk-lib/aws-ssm";
+
 export class TodolistInfraCdkStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);

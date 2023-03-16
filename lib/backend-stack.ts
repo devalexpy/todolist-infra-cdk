@@ -137,7 +137,7 @@ export class BackendStack extends NestedStack {
       this,
       "apigatewayWebACLLogGroup",
       {
-        logGroupName: "aws-waf-cloudfront-logs",
+        logGroupName: "aws-waf-logs-apigateway",
         removalPolicy: RemovalPolicy.DESTROY,
       }
     );
