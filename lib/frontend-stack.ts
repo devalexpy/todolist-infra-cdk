@@ -46,14 +46,7 @@ export class FrontendStack extends NestedStack {
     );
 
     new CfnLoggingConfiguration(this, "cloudfrontWebACLLoggingConfiguration", {
-      logDestinationConfigs: [
-        NestedStack.of(this).formatArn({
-          arnFormat: ArnFormat.COLON_RESOURCE_NAME,
-          service: "logs",
-          resource: "log-group",
-          resourceName: cloudfrontWebACLLogGroup.logGroupName,
-        }),
-      ],
+      logDestinationConfigs: [cloudfrontWebACLLogGroup.logGroupArn],
       resourceArn: cloudfrontWebACL.webacl.attrArn,
     });
 

@@ -142,14 +142,7 @@ export class BackendStack extends NestedStack {
     );
 
     new CfnLoggingConfiguration(this, "apigatewayWebACLLoggingConfiguration", {
-      logDestinationConfigs: [
-        NestedStack.of(this).formatArn({
-          arnFormat: ArnFormat.COLON_RESOURCE_NAME,
-          service: "logs",
-          resource: "log-group",
-          resourceName: apigatewayWebACLLogGroup.logGroupName,
-        }),
-      ],
+      logDestinationConfigs: [apigatewayWebACLLogGroup.logGroupArn],
       resourceArn: apigatewayWebACL.webacl.attrArn,
     });
 
