@@ -24,14 +24,6 @@ export class FrontendStack extends NestedStack {
 
     new WafwebaclToCloudFront(this, "WafwebaclToCloudFrontPattern", {
       existingCloudFrontWebDistribution: cloudfrontS3.cloudFrontWebDistribution,
-      webaclProps: {
-        ...DefaultWafwebaclProps("CLOUDFRONT"),
-        visibilityConfig: {
-          cloudWatchMetricsEnabled: true,
-          metricName: "cloudfront-waf-metric",
-          sampledRequestsEnabled: true,
-        },
-      },
     });
 
     this.cloudfrontUrl = cloudfrontS3.cloudFrontWebDistribution.domainName;

@@ -121,14 +121,6 @@ export class BackendStack extends NestedStack {
 
     new WafwebaclToApiGateway(this, "WafwebaclToApiGatewayPattern", {
       existingApiGatewayInterface: cognitoApigwLambda.apiGateway,
-      webaclProps: {
-        ...DefaultWafwebaclProps("REGIONAL"),
-        visibilityConfig: {
-          cloudWatchMetricsEnabled: true,
-          metricName: "cloudfront-waf-metric",
-          sampledRequestsEnabled: true,
-        },
-      },
     });
 
     this.cognitoUrl = `https://${cognitoDomain.domainName}.auth.${process.env.CDK_DEFAULT_REGION}.amazoncognito.com/login?response_type=token&client_id=${cognitoApigwLambda.userPoolClient.userPoolClientId}&redirect_uri=https://${props.cloudfrontUrl}`;
